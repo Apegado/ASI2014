@@ -1,3 +1,5 @@
+10.0.2.7 mount mount.conf
+
 10.0.2.4 raid raid.conf
 10.0.2.5 lvm lvm.conf
 

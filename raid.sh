@@ -4,6 +4,7 @@ echo "============================="
 echo "Configurando Servidor: " $1
 echo "Tipo Servidor: raid"
 echo "Fichero configuracion"  $2
+echo "============================="
 
 nombreDis="";
 nivelRaid=-1;
@@ -26,10 +27,23 @@ until $DONE; do
     linea=$((linea+1));
 done < $2
 
-echo "Datos Leidos"
+
+ndispositivos=$(echo "$dispositivos" | wc -w)
+
+echo "Datos Leidos:"
 
 echo "$nombreDis";
 echo "$nivelRaid";
 echo "$dispositivos";
+echo "$ndispositivos"
+
 
 echo "============================="
+ssh -oStrictHostKeyChecking=no -t $1 bash -c "'
+
+    echo ""Instalando mdadm""
+    echo "".practic@s"" | sudo -S apt-get install -y mdadm >> /dev/null
+    echo "" Creando raid $nivelRaid devices $dispositivos""
+    echo "".practic@s"" | sudo -S mdadm --create --level=$nivelRaid --raid-devices=$ndispositivos $nombreDis -R $dispositivos
+
+    '"
