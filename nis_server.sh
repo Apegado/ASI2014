@@ -8,6 +8,7 @@ echo "Fichero configuracion"  $2
 
 nombreDominio="";
 DONE=false
+linea=0
 until $DONE; do
     read line || DONE=true
     #Vemos que servicio es y llamamos a su script
@@ -15,6 +16,7 @@ until $DONE; do
         0) nombreDominio=$line
         ;;
     esac
+    linea=$((linea+1));
 done < $2
 
 ssh -oStrictHostKeyChecking=no -t $1 bash -c "'
