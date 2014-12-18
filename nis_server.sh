@@ -23,8 +23,9 @@ ssh -oStrictHostKeyChecking=no -t $1 bash -c "'
 
     echo ""Instalando mdadm""
     echo "".practic@s"" | sudo -S apt-get install -y nis >> /dev/null
-    Creamos la BD inicial
-    echo "".practic@s"" | sudo -S /usr/lib/yp/ypinit -m
+
+    echo $nombreDominio > defaultdomain.tmp
+    echo .practic@s | sudo -S mv defaultdomain.tmp /etc/defaultdomain
 
     cp /etc/default/nis nis.tmp
     cat nis.tmp | sed 's/NISSERVER=false/NISSERVER=true/' | sed 's/NISCLIENT=true/NISCLIENT=false/' > nis2.tmp
@@ -32,6 +33,9 @@ ssh -oStrictHostKeyChecking=no -t $1 bash -c "'
     echo "".practic@s"" | sudo -S mv nis2.tmp /etc/default/nis
     rm nis.tmp
 
+    echo "".practic@s"" | sudo -S /usr/lib/yp/ypinit -m
+
     echo ""Reiniciamos el servicio NIS""
     echo "".practic@s"" | sudo -S service nis restart
+
     '"

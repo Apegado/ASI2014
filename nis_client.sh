@@ -30,6 +30,7 @@ done < $2
 
 lineayp="domain $nombreDominio server $servidor";
 echo $lineayp;
+nisfiles="nis files"
 
 ssh -oStrictHostKeyChecking=no $1 bash -c "'
 
@@ -39,13 +40,20 @@ ssh -oStrictHostKeyChecking=no $1 bash -c "'
     echo ""copiando /etc/default/nis""
     cp /etc/default/nis nis.tmp
     cat nis.tmp | sed 's/NISSERVER=true/NISSERVER=false/' | sed 's/NISCLIENT=false/NISCLIENT=true/' > nis2.tmp
+    echo "".practic@s"" | sudo -S mv nis2.tmp /etc/default/nis
+    rm nis.tmp
 
     echo ""copiando yp.conf""
     cat /etc/yp.conf > yp.tmp
     grep -q $servidor yp.tmp && echo ""El servidor ya se encuentra en yp.conf"" ||( echo ""$lineayp"" >> yp.tmp && echo .practic@s | sudo -S mv yp.tmp /etc/yp.conf)
 
     echo ""Copiando nsswitch.conf""
-    cat /etc/nsswitch.conf > nsswitch.tmp
-    grep -q ""nis files"" nsswitch.tmp && echo ""El fichero nsswitch ya ha sido modificado, revisar manualmente."" || (echo Intentamos && echo -e ""passwd:  nis files\ngroup: nis files\nshadow: nis files"" >> nsswitch.tmp && echo .practic@s | sudo -S cp nsswitch.tmp /etc/nsswitch.conf)
+    ## Esto no funciona
+    #cat /etc/nsswitch.conf > nsswitch.tmp
+    #cat nsswitch.tmp | sed 's/compat/nis/' > nsswitch2.tmp
+    #echo "".practic@s"" | sudo -S mv nsswitch2.tmp /etc/nsswitch.conf
+    #rm nsswitch.tmp nsswitch2.tmp
 
     '"
+
+return
