@@ -1,1 +1,4 @@
-10.0.2.10 nis_client nis_client.conf
+10.0.2.14 nis_server nis_server.conf
+10.0.2.16 nis_client nis_client.conf
+
+10.0.2.16 mount mount.conf
