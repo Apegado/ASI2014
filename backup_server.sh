@@ -1,6 +1,9 @@
-#! /bin/bash
+#!/bin/bash
 
 echo "============================="
-echo "Configurando Servidor: " $1
-echo "Tipo Servidor: backup_server"
-echo "Fichero configuracion"  $2
+echo "Configurando Servidor: BACKUP SERVER"
+
+dirBackup=`sed '1q;d' $1`
+
+echo "Creando directorio $dirBackup..."
+mkdir --parents $dirBackup > /dev/null
