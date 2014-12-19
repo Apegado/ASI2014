@@ -1,13 +1,13 @@
 #! /bin/bash
 
 echo "============================="
-echo "Configurando Servidor: NIS"
+echo "Configurando Servidor: NIS SERVER"
 
 #Cogemos las lineas de manera facil con sed
 nombreDominio=`sed '1q;d' $1`
 
-echo "Instalando mdadm..."
-apt-get install mdadm -qq --force-yes > /dev/null
+echo "Instalando nis..."
+apt-get install nis -qq --force-yes > /dev/null
 
 echo $nombreDominio > defaultdomain.tmp
 mv defaultdomain.tmp /etc/defaultdomain
