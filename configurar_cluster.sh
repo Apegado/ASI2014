@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Este script lee el fichero de configuracion principal y copia el fichero de configuracion especifico en la 
-#maquina destino, ejecuta el script correspondiente y borra el fichero de configuracion especifico de la maquina remota.
+#maquina destino, copia y ejecuta el script correspondiente y borra ambos ficheros de la maquina remota.
 
 echo "leyendo fichero de configuracion $1"
 while read line || [ -n "$line" ]
