@@ -28,8 +28,8 @@ do
   echo "Configurando servicio $serviceName en maquina $remoteAddress con fichero de configuracion $serviceFile..."
   echo "Copiando ficheros $serviceFile y $serviceName.sh ..."
          
-  scp $serviceFile root@$remoteAddress:  #Copiamos el fichero de configuracion a la maquina remoto
-  scp ./$serviceName.sh root@$remoteAddress: #Copiamos el script a la maquina remota
+  scp -oStrictHostKeyChecking=no $serviceFile root@$remoteAddress:  #Copiamos el fichero de configuracion a la maquina remoto
+  scp -oStrictHostKeyChecking=no ./$serviceName.sh root@$remoteAddress: #Copiamos el script a la maquina remota
   #Ejecutamos el script (solo con el basename del fichero por si la ruta era absoluta) y borramos los ficheros
   ssh -n -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null root@$remoteAddress "./$serviceName.sh `basename "$serviceFile"`; rm $serviceName.sh; rm `basename "$serviceFile"`"
   ((nLinea++))
