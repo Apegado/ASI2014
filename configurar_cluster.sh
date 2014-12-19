@@ -1,34 +1,33 @@
-#! /bin/bash
+#!/bin/bash
 
-DONE=false
-until $DONE;
-do
-    read line || DONE=true
-    var1=$(echo $line | awk '{print $1}')
-    var2=$(echo $line | awk '{print $2}')
-    var3=$(echo $line | awk '{print $3}')
-    echo "============================="
-    echo $line
+#Este script lee el fichero de configuracion principal y copia el fichero de configuracion especifico en la 
+#maquina destino, ejecuta el script correspondiente y borra el fichero de configuracion especifico de la maquina remota.
 
-    #Vemos que servicio es y llamamos a su script
-    case "$var2" in
-        "mount") sh ./mount.sh $var1 $var3
-        ;;
-        "raid") sh ./raid.sh $var1 $var3
-        ;;
-        "lvm") sh ./lvm.sh $var1 $var3
-        ;;
-        "nis_server") sh ./nis_server.sh $var1 $var3
-        ;;
-        "nis_client") sh ./nis_client.sh $var1 $var3
-        ;;
-        "nfs_server") sh ./nfs_server.sh $var1 $var3
-        ;;
-        "nfs_client") sh ./nfs_client.sh $var1 $var3
-        ;;
-        "backup_server") sh ./backup_server.sh $var1 $var3
-        ;;
-        "backup_client") sh ./backup_client.sh $var1 $var3
-        ;;
+echo "leyendo fichero de configuracion $1"
+while read line || [ -n "$line" ]
+do 
+  case "$line" in \#*) continue ;; esac #Saltarse comentarios
+  
+  nWord=0
+  for word in $line
+  do
+    case "$nWord" in
+      0) remoteAddress=$word
+      ;;
+
+      1) serviceName=$word
+      ;;
+
+      2) serviceFile=$word
+         echo "Configurando servicio $serviceName en maquina $remoteAddress con fichero de configuracion $serviceFile..."
+         echo "Copiando ficheros $serviceFile y $serviceName.sh ..."
+         
+         scp $serviceFile root@$remoteAddress:  #Copiamos el fichero de configuracion a la maquina remoto
+         scp ./$serviceName.sh root@$remoteAddress: #Copiamos el script a la maquina remota
+         #Ejecutamos el script (solo con el basename del fichero por si la ruta era absoluta) y borramos los ficheros
+         ssh -n -oStrictHostKeyChecking=no root@$remoteAddress "./$serviceName.sh `basename "$serviceFile"`; rm $serviceName.sh; rm `basename "$serviceFile"`" 
+      ;;
     esac
+    ((nWord++))
+  done
 done < $1
