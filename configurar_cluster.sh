@@ -13,6 +13,10 @@ do
   serviceName=$(echo $line | awk '{print $2}')
   serviceFile=$(echo $line | awk '{print $3}')
   
+  if [ -z "$remoteAddress" ] || [ -z "$serviceName" ] || [ -z "$serviceFile" ]; then
+    continue #Saltarse lineas en blanco
+  fi
+  
   echo "Configurando servicio $serviceName en maquina $remoteAddress con fichero de configuracion $serviceFile..."
   echo "Copiando ficheros $serviceFile y $serviceName.sh ..."
          
