@@ -1,5 +1,5 @@
 # ASI2014
-
+##Script maestro para la configuración de un cluster Linux
 1. Estructura General
 
 
